@@ -18,15 +18,72 @@ void democode() {
     vector<string> myArray3{ "a","bc","def","ghij","klmno","pqrstu","vwxyzab" };
 }
 
+//This is used to create a node in the linked list. Node is just the name, not a type.
+struct Node
+{
+    vector<string>* data;
+    struct Node* next;
+};
 
+void append(struct Node** head, vector<string>* node_data) {
+
+    /* 1. create and allocate node */
+    struct Node* newNode = new Node;
+
+    struct Node* last = *head; /* used in step 5*/
+
+    /* 2. assign data to the node */
+    newNode->data = node_data;
+
+
+    /* 3. set next pointer of new node to null as its the last node*/
+    newNode->next = NULL;
+
+    /* 4. if list is empty, new node becomes first node */
+    if (*head == NULL)
+    {
+        *head = newNode;
+        return;
+    }
+
+    /* 5. Else traverse till the last node */
+    while (last->next != NULL)
+        last = last->next;
+
+    /* 6. Change the next of last node */
+    last->next = newNode;
+    return;
+
+}
+// display linked list contents
+void displayList(struct Node* node)
+{
+    //traverse the list to display each node
+    while (node != NULL)
+    {
+        for (string item : *(node->data)) {
+            cout << item << endl;
+        }
+        node = node->next;
+    }
+
+    if (node == NULL)
+        cout << "null";
+}
 
 
 
 int main()
 {
+    /* empty list */
+    struct Node* head = NULL;
 
 
-    std::cout << "Hello World!\n";
+    vector<string> thing = {"thing","otherthing"};
+    vector<string>* point = &thing;
+    append(&head, point);
+    displayList(head);
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
