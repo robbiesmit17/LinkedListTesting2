@@ -4,28 +4,36 @@
 #include <iostream>
 #include <vector>
 #include <list>
-using namespace std;
+
+
+#include <fstream>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include "boost/filesystem.hpp"
+#include <filesystem>
+#include <algorithm>
+
 
 void democode() {
     //a vector is a template for a variable array. This creates an array of strings with size 100.
-    vector<string> myArray(100);
+    std::vector<std::string> myArray(100);
     //vectors have a size function
     int myArraySize = myArray.size();
     //this assigns all values in myArray2 as thingymobob
-    vector<string> myArray2(100, "thingymobob");
+    std::vector<std::string> myArray2(100, "thingymobob");
 
     //vectors allow for initialising with values. Size is automatically assigned.
-    vector<string> myArray3{ "a","bc","def","ghij","klmno","pqrstu","vwxyzab" };
+    std::vector<std::string> myArray3{ "a","bc","def","ghij","klmno","pqrstu","vwxyzab" };
 }
 
 //This is used to create a node in the linked list. Node is just the name, not a type.
 struct Node
 {
-    vector<string>* data;
+    std::vector<std::string>* data;
     struct Node* next;
 };
 
-void append(struct Node** head, vector<string>* node_data) {
+void append(struct Node** head, std::vector<std::string>* node_data) {
 
     /* 1. create and allocate node */
     struct Node* newNode = new Node;
@@ -61,29 +69,68 @@ void displayList(struct Node* node)
     //traverse the list to display each node
     while (node != NULL)
     {
-        for (string item : *(node->data)) {
-            cout << item << endl;
+        for (std::string item : *(node->data)) {
+            std::cout << item << std::endl;
         }
         node = node->next;
     }
 
     if (node == NULL)
-        cout << "null";
+        std::cout << "null";
 }
 
+void ReadWords(std::string fileName) {
+    std::string myText;
+    std::ifstream _ifswords(fileName);
 
+    std::string _strWords[10];
+
+    while (getline(_ifswords, myText)) {
+        // Output the text from the file
+        std::cout << myText << std::endl;
+    }
+
+    // Close the file
+    _ifswords.close();
+
+}
+
+void LoopThroughFileSystem() {
+    boost::filesystem::path p("./words");
+
+    boost::filesystem::directory_iterator end_itr;
+
+    // cycle through the directory
+    for (boost::filesystem::directory_iterator itr(p); itr != end_itr; ++itr)
+    {
+        // If it's not a directory, list it. If you want to list directories too, just remove this check.
+        if (boost::filesystem::is_regular_file(itr->path())) {
+            // assign current file name to current_file and echo it out to the console.
+
+
+            std::string current_file = itr->path().string();
+            std::cout << current_file << std::endl;
+            ReadWords(current_file);
+
+        }
+    }
+}
+
+//next steps: reading from a file into a vector efficiently
 
 int main()
 {
     /* empty list */
+    //struct Node* head = NULL;
+    //std::vector<std::string> thing = {"thing","otherthing"};
+    //std::vector<std::string>* point = &thing;
+    //append(&head, point);
+    //displayList(head);
+
     struct Node* head = NULL;
 
-
-    vector<string> thing = {"thing","otherthing"};
-    vector<string>* point = &thing;
-    append(&head, point);
-    displayList(head);
-
+    LoopThroughFileSystem();
+   
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
