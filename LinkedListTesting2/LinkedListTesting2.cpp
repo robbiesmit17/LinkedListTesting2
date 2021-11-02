@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <list>
-
-
+#include <boost/algorithm/string/classification.hpp> // Include boost::for is_any_of
+#include <boost/algorithm/string/split.hpp> // Include for boost::split
 #include <fstream>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -79,23 +79,39 @@ void displayList(struct Node* node)
         std::cout << "null";
 }
 
-void ReadWords(std::string fileName) {
-    std::string myText;
-    std::ifstream _ifswords(fileName);
+std::vector<std::string> ReadWords(std::string fileName) {
+    //std::string myText;
+    //std::ifstream _ifswords(fileName);
 
-    std::string _strWords[10];
+    //std::string _strWords[10];
 
-    while (getline(_ifswords, myText)) {
+    //while (getline(_ifswords, myText)) {
         // Output the text from the file
-        std::cout << myText << std::endl;
-    }
-
+       // std::cout << myText << std::endl;
+    //}
     // Close the file
-    _ifswords.close();
 
+
+    std::ifstream is(fileName);
+    //is.seekg(0, is.end);
+    //int length = is.tellg();
+    //is.seekg(0, is.beg);
+
+    //char* buffer = new char[length];
+    //is.read(buffer, length);
+
+    //delete[] buffer;
+
+    std::vector<std::string> output;
+    std::string input = std::string((std::istreambuf_iterator<char>(is)), std::istreambuf_iterator<char>());
+    
+    output = boost::split(output,input, boost::is_any_of("\n"), boost::token_compress_on);
+    //_ifswords.close();
+    is.close();
+    return output;
 }
 
-void LoopThroughFileSystem() {
+void LoopThroughFileSystem(Node* head) {
     boost::filesystem::path p("./words");
 
     boost::filesystem::directory_iterator end_itr;
@@ -109,8 +125,15 @@ void LoopThroughFileSystem() {
 
 
             std::string current_file = itr->path().string();
-            std::cout << current_file << std::endl;
-            ReadWords(current_file);
+            //std::cout << current_file << std::endl;
+
+            //returns a vector. then this adds it to the linked list.
+            std::vector<std::string> item = ReadWords(current_file);
+            append(&head, &item);
+
+            for (std::string thing : item) {
+                std::cout << thing << std::endl;
+            }
 
         }
     }
@@ -129,8 +152,9 @@ int main()
 
     struct Node* head = NULL;
 
-    LoopThroughFileSystem();
-   
+    LoopThroughFileSystem(head);
+    std::cout << std::endl;
+    displayList(head);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
