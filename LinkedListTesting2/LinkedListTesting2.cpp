@@ -82,28 +82,23 @@ void displayList(struct Node* node)
     }
 }
 
+void displayCategories(struct Node* node)
+{
+    Node* list = node;
+    //traverse the list to display each node
+    while (list != NULL)
+    {
+        std::cout << list->categoryName << std::endl;
+        list = list->next;
+    }
+}
+
+
+//going to keep this as a seperate function for future expanability. Possibly read from different directories? 
 std::vector<std::string> ReadWords(std::string fileName) {
-    //std::string myText;
-    //std::ifstream _ifswords(fileName);
-
-    //std::string _strWords[10];
-
-    //while (getline(_ifswords, myText)) {
-        // Output the text from the file
-       // std::cout << myText << std::endl;
-    //}
-    // Close the file
-
 
     std::ifstream is(fileName);
-    //is.seekg(0, is.end);
-    //int length = is.tellg();
-    //is.seekg(0, is.beg);
 
-    //char* buffer = new char[length];
-    //is.read(buffer, length);
-
-    //delete[] buffer;
 
     std::vector<std::string> output;
     std::string input = std::string((std::istreambuf_iterator<char>(is)), std::istreambuf_iterator<char>());
@@ -135,39 +130,32 @@ void LoopThroughFileSystem(Node* &head) {
             std::vector<std::string> item = (ReadWords(current_file));
             std::string fileName = itr->path().stem().string();
             append(&head,fileName, item);
-
         }
     }
 }
 
-//next steps: reading from a file into a vector efficiently
 
 int main()
 {
-    /* empty list */
-    //struct Node* head = NULL;
-    //std::vector<std::string> thing = {"thing","otherthing"};
-    //std::vector<std::string>* point = &thing;
-    //append(&head, point);
-    //displayList(head);
 
     struct Node* head = NULL;
 
     LoopThroughFileSystem(head);
     std::cout << std::endl;
     displayList(head);
-    //std::cout << head;
+    /*
+    use an iterator or something to display all of the categories.
+    user picks a category.
+
+    a random word is picked from the category.
+    word is scrambled and couted.
+
+    user inputs the answer.
+
+    score is added.
     
+    
+    
+    */
 
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
