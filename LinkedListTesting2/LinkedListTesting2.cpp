@@ -31,11 +31,12 @@ void democode() {
 //This is used to create a node in the linked list. Node is just the name, not a type.
 struct Node
 {
+    std::string categoryName;
     std::vector<std::string> data;
     struct Node* next;
 };
 
-void append(struct Node** head, std::vector<std::string> node_data) {
+void append(struct Node** head, std::string categoryName, std::vector<std::string> node_data) {
 
     /* 1. create and allocate node */
     struct Node* newNode = new Node;
@@ -43,6 +44,7 @@ void append(struct Node** head, std::vector<std::string> node_data) {
     struct Node* last = *head; /* used in step 5*/
 
     /* 2. assign data to the node */
+    newNode->categoryName = categoryName;
     newNode->data = node_data;
 
 
@@ -72,7 +74,7 @@ void displayList(struct Node* node)
     //traverse the list to display each node
     while (list != NULL)
     {
-        std::cout << "couting stuff" << std::endl;
+        std::cout << list->categoryName << std::endl;
         for (std::string item : list->data) {
             std::cout << "   " << item << std::endl;
         }  
@@ -131,7 +133,8 @@ void LoopThroughFileSystem(Node* &head) {
             //returns a vector. then this adds it to the linked list.
             std::cout << current_file << std::endl;
             std::vector<std::string> item = (ReadWords(current_file));
-            append(&head, item);
+            std::string fileName = itr->path().stem().string();
+            append(&head,fileName, item);
 
         }
     }
