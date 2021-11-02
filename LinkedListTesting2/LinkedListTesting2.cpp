@@ -15,7 +15,9 @@
 
 
 void democode() {
-    //a vector is a template for a variable array. This creates an array of strings with size 100.
+    //a vector is a template for a variable array.
+    
+    //This creates an array of strings with size 100.
     std::vector<std::string> myArray(100);
     //vectors have a size function
     int myArraySize = myArray.size();
@@ -29,11 +31,11 @@ void democode() {
 //This is used to create a node in the linked list. Node is just the name, not a type.
 struct Node
 {
-    std::vector<std::string>* data;
+    std::vector<std::string> data;
     struct Node* next;
 };
 
-void append(struct Node** head, std::vector<std::string>* node_data) {
+void append(struct Node** head, std::vector<std::string> node_data) {
 
     /* 1. create and allocate node */
     struct Node* newNode = new Node;
@@ -66,17 +68,16 @@ void append(struct Node** head, std::vector<std::string>* node_data) {
 // display linked list contents
 void displayList(struct Node* node)
 {
+    Node* list = node;
     //traverse the list to display each node
-    while (node != NULL)
+    while (list != NULL)
     {
-        for (std::string item : *(node->data)) {
-            std::cout << item << std::endl;
-        }
-        node = node->next;
+        std::cout << "couting stuff" << std::endl;
+        for (std::string item : list->data) {
+            std::cout << "   " << item << std::endl;
+        }  
+        list = list->next;
     }
-
-    if (node == NULL)
-        std::cout << "null";
 }
 
 std::vector<std::string> ReadWords(std::string fileName) {
@@ -108,10 +109,11 @@ std::vector<std::string> ReadWords(std::string fileName) {
     output = boost::split(output,input, boost::is_any_of("\n"), boost::token_compress_on);
     //_ifswords.close();
     is.close();
+    //std::cout << input<<std::endl;
     return output;
 }
 
-void LoopThroughFileSystem(Node* head) {
+void LoopThroughFileSystem(Node* &head) {
     boost::filesystem::path p("./words");
 
     boost::filesystem::directory_iterator end_itr;
@@ -125,15 +127,11 @@ void LoopThroughFileSystem(Node* head) {
 
 
             std::string current_file = itr->path().string();
-            //std::cout << current_file << std::endl;
 
             //returns a vector. then this adds it to the linked list.
-            std::vector<std::string> item = ReadWords(current_file);
-            append(&head, &item);
-
-            for (std::string thing : item) {
-                std::cout << thing << std::endl;
-            }
+            std::cout << current_file << std::endl;
+            std::vector<std::string> item = (ReadWords(current_file));
+            append(&head, item);
 
         }
     }
@@ -155,6 +153,9 @@ int main()
     LoopThroughFileSystem(head);
     std::cout << std::endl;
     displayList(head);
+    //std::cout << head;
+    
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
