@@ -1,18 +1,14 @@
-// LinkedListTesting2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <list>
+#include <filesystem>
+#include <algorithm>
 #include <boost/algorithm/string/classification.hpp> // Include boost::for is_any_of
 #include <boost/algorithm/string/split.hpp> // Include for boost::split
-#include <fstream>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include "boost/filesystem.hpp"
-#include <filesystem>
-#include <algorithm>
-
 
 void democode() {
     //a vector is a template for a variable array.
@@ -70,15 +66,15 @@ void append(struct Node** head, std::string categoryName, std::vector<std::strin
 // display linked list contents
 void displayList(struct Node* node)
 {
-    Node* list = node;
+
     //traverse the list to display each node
-    while (list != NULL)
+    while (node != NULL)
     {
-        std::cout << list->categoryName << std::endl;
-        for (std::string item : list->data) {
+        std::cout << node->categoryName << std::endl;
+        for (std::string item : node->data) {
             std::cout << "   " << item << std::endl;
-        }  
-        list = list->next;
+        }
+        node = node->next;
     }
 }
 
